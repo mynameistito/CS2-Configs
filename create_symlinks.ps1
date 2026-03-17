@@ -1,6 +1,10 @@
 # CS2 Config Setup
 # Symlink mode requires Administrator OR Developer Mode enabled in Windows Settings.
 
+param(
+    [string]$Mode = ""
+)
+
 $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # --- Auto-detect CS2 cfg directory ---
@@ -66,19 +70,20 @@ if ($cfgFiles.Count -eq 0) {
     exit 1
 }
 
-# --- Ask user for mode ---
-Write-Host ""
-Write-Host "How would you like to deploy the configs?" -ForegroundColor Cyan
-Write-Host "  [1] Symlink  (requires Admin or Developer Mode; changes in repo apply instantly)"
-Write-Host "  [2] Copy     (plain file copy; re-run this script to update)"
-Write-Host ""
-$choice = Read-Host "Enter 1 or 2"
-
-if ($choice -eq "2") {
-    $mode = "copy"
+# --- Ask user for mode (skip if already passed in via -Mode) ---
+if ($Mode -eq "symlink" -or $Mode -eq "copy") {
+    $mode = $Mode
 } else {
-    $mode = "symlink"
+    Write-Host ""
+    Write-Host "How would you like to deploy the configs?" -ForegroundColor Cyan
+    Write-Host "  [1] Symlink  (requires Admin or Developer Mode; changes in repo apply instantly)"
+    Write-Host "  [2] Copy     (plain file copy; re-run this script to update)"
+    Write-Host ""
+    $choice = Read-Host "Enter 1 or 2"
+    $mode = if ($choice -eq "2") { "copy" } else { "symlink" }
+}
 
+if ($mode -eq "symlink") {
     # Auto-elevate to Administrator if not already running elevated
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
         [Security.Principal.WindowsBuiltInRole]::Administrator)
@@ -87,7 +92,7 @@ if ($choice -eq "2") {
         Write-Host ""
         Write-Host "Symlink mode requires elevation. Relaunching as Administrator..." -ForegroundColor Yellow
         $scriptPath = $MyInvocation.MyCommand.Path
-        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`"" -Verb RunAs
+        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Mode symlink" -Verb RunAs
         exit
     }
 }
@@ -140,3 +145,6 @@ foreach ($file in $cfgFiles) {
         Write-Host "  [FAIL] $($file.Name)" -ForegroundColor Red
     }
 }
+
+Write-Host ""
+Read-Host "Press Enter to close"
