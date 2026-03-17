@@ -30,7 +30,7 @@ CS2-Configs/
 ├── config_crosshair.cfg    # Crosshair settings
 ├── config_default_binds.cfg  # Standard competitive/DM binds
 ├── config_surf_binds.cfg   # Surf-specific binds (swaps in/out automatically)
-└── create_symlinks.ps1     # PowerShell script to symlink configs into CS2
+└── deploy_configs.ps1      # PowerShell script to deploy configs into CS2 (symlink or copy)
 ```
 
 ### autoexec.cfg
@@ -234,7 +234,7 @@ Run the setup script from any PowerShell window (no need to open as Administrato
 
 ```powershell
 cd "F:\GitHub\mynameistito\CS2-Configs"
-.\create_symlinks.ps1
+.\deploy_configs.ps1
 ```
 
 If you hit an execution policy error, run this first:
@@ -284,4 +284,4 @@ git pull
 ```
 
 - **Symlink mode:** changes are live immediately — just run `exec autoexec.cfg` in console.
-- **Copy mode:** re-run `.\create_symlinks.ps1` after pulling to push the updated files into CS2.
+- **Copy mode:** re-run `.\deploy_configs.ps1` after pulling to push the updated files into CS2.
