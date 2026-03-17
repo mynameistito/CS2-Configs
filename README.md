@@ -134,6 +134,7 @@ Binds use **scancodes** instead of key names, making them layout-independent (wo
 | `MOUSE2` | Alt Fire / Scope |
 | `MOUSE3` | Ping Location |
 | `MOUSE4` | Push to Talk |
+| `;` | Voice Record (Push to Talk) |
 | `MWHEELUP / DOWN` | Jump (B-Hop) |
 | `Q` | Quick Switch (Last Weapon) |
 | `R` | Reload |
@@ -142,6 +143,7 @@ Binds use **scancodes** instead of key names, making them layout-independent (wo
 | `G` | Drop Weapon |
 | `H` | Switch Viewmodel Hand |
 | `1–9 / 0` | Weapon Slots |
+| `X` | Slot 12 (Healthshot / Special) |
 | `TAB` | Scoreboard |
 | `ENTER` | All Chat |
 | `U` | Team Chat |
@@ -161,6 +163,7 @@ Binds use **scancodes** instead of key names, making them layout-independent (wo
 | `F10` | Quit Game |
 | `DEL` | Sell All (Buy Menu) |
 | `]` | Toggle Microphone On/Off |
+| `[` | Toggle Voice Loopback |
 | `, / .` | Buy Primary / Secondary Ammo |
 
 ### config_surf_binds.cfg — Surf
@@ -172,8 +175,9 @@ Automatically loaded when connecting to a surf server via alias. Key differences
 | `MWHEELUP / DOWN` | Previous / Next Weapon (not jump) |
 | `O` | Turn Left |
 | `P` | Turn Right |
-| `Q` | Custom Alias (`css_end`) |
-| `R` | Custom Alias (`css_rs`) |
+| `Q` | End Zone Bind (`css_end`) |
+| `R` | Restart Stage (`css_rs`) |
+| `T` | Restart Bind - Back to Start (`css_r`) |
 | `Z` | RTV (`css_rtv`) |
 | `H` | Custom Alias (`css_hide`) |
 
