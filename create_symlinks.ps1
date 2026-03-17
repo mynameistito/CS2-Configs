@@ -1,5 +1,5 @@
-# CS2 Config Symlink Creator
-# Run as Administrator OR with Developer Mode enabled in Windows Settings.
+# CS2 Config Setup
+# Symlink mode requires Administrator OR Developer Mode enabled in Windows Settings.
 
 $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -66,7 +66,22 @@ if ($cfgFiles.Count -eq 0) {
     exit 1
 }
 
-Write-Host "`nCreating symlinks..." -ForegroundColor Cyan
+# --- Ask user for mode ---
+Write-Host ""
+Write-Host "How would you like to deploy the configs?" -ForegroundColor Cyan
+Write-Host "  [1] Symlink  (requires Admin or Developer Mode; changes in repo apply instantly)"
+Write-Host "  [2] Copy     (plain file copy; re-run this script to update)"
+Write-Host ""
+$choice = Read-Host "Enter 1 or 2"
+
+if ($choice -eq "2") {
+    $mode = "copy"
+} else {
+    $mode = "symlink"
+}
+
+Write-Host ""
+Write-Host "Mode   : $mode" -ForegroundColor Cyan
 Write-Host "Source : $source"
 Write-Host "Target : $target`n"
 
@@ -79,22 +94,36 @@ foreach ($file in $cfgFiles) {
         Write-Host "  Removed existing: $($file.Name)" -ForegroundColor Yellow
     }
 
-    # Create the symlink
-    try {
-        New-Item -ItemType SymbolicLink -Path $linkPath -Target $file.FullName -ErrorAction Stop | Out-Null
-        Write-Host "  Linked: $($file.Name)" -ForegroundColor Green
-    } catch {
-        Write-Error "  Failed to link $($file.Name): $_"
-        Write-Error "  Make sure you are running as Administrator or have Developer Mode enabled."
+    if ($mode -eq "copy") {
+        try {
+            Copy-Item -Path $file.FullName -Destination $linkPath -ErrorAction Stop
+            Write-Host "  Copied: $($file.Name)" -ForegroundColor Green
+        } catch {
+            Write-Error "  Failed to copy $($file.Name): $_"
+        }
+    } else {
+        try {
+            New-Item -ItemType SymbolicLink -Path $linkPath -Target $file.FullName -ErrorAction Stop | Out-Null
+            Write-Host "  Linked: $($file.Name)" -ForegroundColor Green
+        } catch {
+            Write-Error "  Failed to link $($file.Name): $_"
+            Write-Error "  Make sure you are running as Administrator or have Developer Mode enabled."
+        }
     }
 }
 
-Write-Host "`nDone. Verifying links:`n"
+Write-Host "`nDone. Verifying files:`n"
 foreach ($file in $cfgFiles) {
     $linkPath = Join-Path $target $file.Name
     $item = Get-Item $linkPath -ErrorAction SilentlyContinue
-    if ($item -and $item.LinkType -eq "SymbolicLink") {
-        Write-Host "  [OK] $($file.Name) -> $($item.Target)" -ForegroundColor Green
+    if ($item) {
+        if ($mode -eq "symlink" -and $item.LinkType -eq "SymbolicLink") {
+            Write-Host "  [OK] $($file.Name) -> $($item.Target)" -ForegroundColor Green
+        } elseif ($mode -eq "copy" -and $item.LinkType -ne "SymbolicLink") {
+            Write-Host "  [OK] $($file.Name)" -ForegroundColor Green
+        } else {
+            Write-Host "  [FAIL] $($file.Name)" -ForegroundColor Red
+        }
     } else {
         Write-Host "  [FAIL] $($file.Name)" -ForegroundColor Red
     }
