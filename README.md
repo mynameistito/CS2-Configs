@@ -215,7 +215,8 @@ Defined in `config_aliases.cfg`.
 | `dm` | `121.127.47.34:26764` | Mirage |
 | `dm2` | `121.127.47.34:26084` | Dust |
 
-### KZG Surf — Sydney
+### Surf — Sydney
+[KZG Servers](https://join.kzg.gg)
 
 Automatically execs `config_surf_binds.cfg` before connecting.
 
@@ -226,17 +227,18 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 | `hard` | `103.212.227.45:27090` | Hard |
 
 ### Retakes — Sydney
+[KZG Servers](https://join.kzg.gg)
 
 Automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
 
 | Alias | Server |
 |---|---|
-| `retakes1` | `121.127.47.35:26481` |
-| `retakes2` | `121.127.47.34:25891` |
-| `retakes3` | `121.127.47.33:25048` |
-| `retakes4` | `121.127.47.34:25045` |
-| `retakes5` | `121.127.47.35:25372` |
-| `retakes6` | `121.127.47.33:26958` |
+| `retakes1` / `rt1` | `121.127.47.35:26481` |
+| `retakes2` / `rt2` | `121.127.47.34:25891` |
+| `retakes3` / `rt3` | `121.127.47.33:25048` |
+| `retakes4` / `rt4` | `121.127.47.34:25045` |
+| `retakes5` / `rt5` | `121.127.47.35:25372` |
+| `retakes6` / `rt6` | `121.127.47.33:26958` |
 
 ---
 
