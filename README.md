@@ -210,21 +210,30 @@ Defined in `config_aliases.cfg`.
 
 ### Pracc DM — Sydney
 
-| Alias | Server | Map |
-|---|---|---|
-| `dm` | `121.127.47.34:26764` | Mirage |
-| `dm2` | `121.127.47.34:26084` | Dust |
+| Alias | Server                | Map    |
+| ----- | --------------------- | ------ |
+| `dm`  | `121.127.47.34:26764` | Mirage |
+| `dm2` | `121.127.47.34:26084` | Dust   |
 
 ### Surf — Sydney
-[KZG Servers](https://join.kzg.gg)
+
+#### [KZG Servers](https://join.kzg.gg)
 
 Automatically execs `config_surf_binds.cfg` before connecting.
 
-| Alias | Server | Difficulty |
-|---|---|---|
-| `easy` | `103.212.227.45:27030` | Easy |
-| `easy2` | `103.212.227.45:27015` | Easy 2 |
-| `hard` | `103.212.227.45:27090` | Hard |
+| Alias   | Server IP              | Difficulty |
+|-------- | ---------------------- | ---------- |
+| `easy`  | `103.212.227.45:27030` | Easy       |
+| `easy2` | `103.212.227.45:27015` | Easy 2     |
+| `hard`  | `103.212.227.45:27090` | Hard       |
+
+#### [Insanity Gaming](https://insanitygaming.net/forums/)
+
+Automatically execs `config_surf_binds.cfg` before connecting.
+
+| Alias | Server IP             |
+| ----- | --------------------- |
+| `ig`  | `103.212.224.9:27015` |
 
 ### Retakes — Sydney
 [KZG Servers](https://join.kzg.gg)
@@ -232,7 +241,7 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 Automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
 
 | Alias | Server |
-|---|---|
+|------------------- | --------------------- |
 | `retakes1` / `rt1` | `121.127.47.35:26481` |
 | `retakes2` / `rt2` | `121.127.47.34:25891` |
 | `retakes3` / `rt3` | `121.127.47.33:25048` |
@@ -240,6 +249,10 @@ Automatically execs `config_default_binds.cfg` before connecting (restores binds
 | `retakes5` / `rt5` | `121.127.47.35:25372` |
 | `retakes6` / `rt6` | `121.127.47.33:26958` |
 
+### KZ
+| Alias | Server |
+| ---- | ---------------------------- |
+| `kz` | `connect 121.127.47.34:26855 |
 ---
 
 ## Installation
