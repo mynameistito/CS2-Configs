@@ -1,6 +1,6 @@
 # CS2 Configs — mynameistito
 
-Personal Counter-Strike 2 configuration files. Includes binds, convars, crosshair, aliases, and a surf-specific bind profile — all managed via Git and symlinked into the CS2 cfg directory.
+Personal Counter-Strike configuration files for CS2, CSGO (legacy), and Counter-Strike: Source. Includes binds, convars, crosshair, aliases, and a surf-specific bind profile — all managed via Git and deployed into each game's cfg directory.
 
 **Steam:** [steamcommunity.com/id/mynameistito](https://steamcommunity.com/id/mynameistito/)
 
@@ -39,17 +39,21 @@ Personal Counter-Strike 2 configuration files. Includes binds, convars, crosshai
 
 ```
 CS2-Configs/
-├── autoexec.cfg              # Entry point — execs all other configs
-├── config_aliases.cfg        # Custom aliases and server shortcuts
-├── config_convars.cfg        # All game settings and convars
-├── config_crosshair.cfg      # Crosshair settings
-├── config_default_binds.cfg  # Standard competitive/DM binds
-├── config_surf_binds.cfg     # Surf-specific binds (swaps in/out automatically)
-├── config_allkeys.cfg        # Diagnostic — binds every key to echo its name or "KEY NOT BOUND"
-└── deploy_configs.ps1        # PowerShell script to deploy configs into CS2 (symlink or copy)
+├── cs2/
+│   ├── autoexec.cfg              # Entry point — execs all other configs
+│   ├── config_aliases.cfg        # Custom aliases and server shortcuts
+│   ├── config_convars.cfg        # All game settings and convars
+│   ├── config_crosshair.cfg      # Crosshair settings
+│   ├── config_default_binds.cfg  # Standard competitive/DM binds
+│   ├── config_kz_binds.cfg       # KZ-specific binds
+│   ├── config_surf_binds.cfg     # Surf-specific binds (swaps in/out automatically)
+│   └── config_allkeys.cfg        # Diagnostic — binds every key to echo its name or "KEY NOT BOUND"
+├── csgo/                         # CSGO (legacy) configs — coming soon
+├── css/                          # Counter-Strike: Source configs — coming soon
+└── deploy_configs.ps1            # PowerShell script to deploy configs (symlink or copy)
 ```
 
-### autoexec.cfg
+### cs2/autoexec.cfg
 
 The entry point. Executed on every game launch via the launch option. Loads all other configs in order:
 
@@ -278,20 +282,44 @@ If you hit an execution policy error, run this first:
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-The script will ask how you want to deploy:
+The script will prompt for **game** and **mode** if not passed as arguments:
 
-| Option | Description |
-|---|---|
-| **[1] Symlink** | Links CS2's cfg files directly to the repo. Any `git pull` applies instantly — no re-running the script. The script auto-elevates to Administrator if needed. |
-| **[2] Copy** | Copies the files into the CS2 cfg directory. No elevation needed. Re-run the script after each `git pull` to update. |
+**Game selection (`-Game`):**
+
+| Option | Flag | Description |
+|---|---|---|
+| **[1] CS2** | `-Game cs2` | Counter-Strike 2 |
+| **[2] CSGO** | `-Game csgo` | Counter-Strike: Global Offensive (legacy) |
+| **[3] CSS** | `-Game css` | Counter-Strike: Source |
+| **[4] All** | `-Game all` | Deploy to all installed games |
+
+**Deploy mode (`-Mode`):**
+
+| Option | Flag | Description |
+|---|---|---|
+| **[1] Symlink** | `-Mode symlink` | Links cfg files directly to the repo. Any `git pull` applies instantly — no re-running the script. The script auto-elevates to Administrator if needed. |
+| **[2] Copy** | `-Mode copy` | Copies the files into the game's cfg directory. No elevation needed. Re-run the script after each `git pull` to update. |
+
+You can skip prompts entirely by passing both flags:
+
+```powershell
+.\deploy_configs.ps1 -Game cs2 -Mode copy
+.\deploy_configs.ps1 -Game all -Mode symlink
+```
 
 > [!CAUTION]
-> **Symlink mode:** CS2's cfg files point directly into the cloned repo folder. If you move, rename, or delete the repo, **all symlinks will break and your configs will stop loading**. Keep the repo in a stable location.
+> **Symlink mode:** cfg files point directly into the cloned repo folder. If you move, rename, or delete the repo, **all symlinks will break and your configs will stop loading**. Keep the repo in a stable location.
 
-**Target directory:** Auto-detected from the Steam registry and library folders. Typically:
-```
-<SteamLibrary>\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\
-```
+> [!NOTE]
+> **CSGO and CSS configs** are placeholders for now — the directories exist but contain no `.cfg` files yet. The script will skip them gracefully with a warning if selected.
+
+**Target directories** are auto-detected from the Steam registry and library folders:
+
+| Game | Path |
+|---|---|
+| CS2 | `<SteamLibrary>\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\` |
+| CSGO | `<SteamLibrary>\steamapps\common\Counter-Strike Global Offensive\csgo\cfg\` |
+| CSS | `<SteamLibrary>\steamapps\common\Counter-Strike Source\cstrike\cfg\` |
 
 ### 3. Set Launch Options
 

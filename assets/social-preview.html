@@ -3,300 +3,436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280">
-<title>CS2 Configs — mynameistito</title>
+<title>CS Configs — mynameistito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:       #06060D;
+    --surf:     #0E0E1C;
+    --surf-2:   #131320;
+    --cyan:     #00C8E8;
+    --green:    #2EC27E;
+    --orange:   #E07830;
+    --text:     #E0E4F8;
+    --mid:      #8890C0;
+    --dim:      #505480;
+    --border:   rgba(0,200,232,0.18);
+  }
 
   body {
     width: 1280px;
     height: 640px;
     overflow: hidden;
-    background: #0D0D0F;
-    font-family: Consolas, 'Courier New', monospace;
-    color: #F0F0F0;
+    background: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text);
+    position: relative;
   }
 
+  /* ── Background layers ── */
+
+  /* Dot grid */
+  .layer-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,200,232,0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Warm glow — left */
+  .layer-glow-l {
+    position: absolute;
+    left: -60px; top: 50%; transform: translateY(-50%);
+    width: 520px; height: 480px;
+    background: radial-gradient(ellipse, rgba(224,120,48,0.07) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Cool glow — right */
+  .layer-glow-r {
+    position: absolute;
+    right: 8%; top: 50%; transform: translateY(-50%);
+    width: 600px; height: 500px;
+    background: radial-gradient(ellipse, rgba(0,200,232,0.055) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Vignette edges */
+  .layer-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right,  var(--bg) 0%, transparent 8%, transparent 92%, var(--bg) 100%),
+      linear-gradient(to bottom, var(--bg) 0%, transparent 10%, transparent 90%, var(--bg) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Top accent bar ── */
   .top-bar {
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right, #C8A84B, #E8832A, #C8A84B);
+    position: relative; z-index: 2;
+    width: 100%; height: 2px;
+    background: linear-gradient(to right,
+      transparent 0%, var(--cyan) 22%, var(--orange) 50%, var(--cyan) 78%, transparent 100%
+    );
   }
 
+  /* ── Layout ── */
   .main {
     display: flex;
     width: 100%;
-    height: 596px; /* 640 - 4px top - 40px bottom */
+    height: 598px;
+    position: relative; z-index: 1;
   }
 
   /* ── LEFT PANEL ── */
   .left {
-    width: 45%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    padding: 0 56px;
-    gap: 28px;
+    padding: 0 52px 0 64px;
     position: relative;
+    overflow: hidden;
   }
 
+  /* Divider */
   .left::after {
     content: '';
     position: absolute;
-    right: 0;
-    top: 40px;
-    bottom: 40px;
+    right: 0; top: 32px; bottom: 32px;
     width: 1px;
-    background: rgba(200, 168, 75, 0.2);
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(0,200,232,0.16) 30%,
+      rgba(224,120,48,0.12) 60%,
+      transparent
+    );
   }
 
-  .crosshair {
-    display: block;
+  /* Crosshair — large faded watermark */
+  .xhair-bg {
+    position: absolute;
+    right: 24px; top: 50%; transform: translateY(-50%);
+    opacity: 0.025;
+    pointer-events: none;
   }
 
-  .title-block {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  /* Crosshair — small logo */
+  .xhair-icon { display: block; margin-bottom: 22px; }
 
-  .title {
-    font-size: 72px;
-    font-weight: 700;
-    color: #F0F0F0;
+  .title-cs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 104px;
+    line-height: 0.84;
     letter-spacing: 0.04em;
-    line-height: 1;
+    color: var(--text);
   }
 
-  .subtitle {
-    font-size: 20px;
-    color: #C8A84B;
-    letter-spacing: 0.12em;
+  .title-configs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 104px;
+    line-height: 0.84;
+    letter-spacing: 0.04em;
+    color: var(--cyan);
+  }
+
+  .handle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 20px;
+    margin-bottom: 26px;
   }
 
-  .desc {
-    font-size: 15px;
-    color: #A0A0B4;
-    letter-spacing: 0.06em;
-    line-height: 1.6;
+  .tags { display: flex; gap: 8px; }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 16px;
+    border-radius: 2px;
+    border: 1px solid;
   }
+
+  .tag-cs2  { color: var(--cyan);   border-color: rgba(0,200,232,0.38);  background: rgba(0,200,232,0.07); }
+  .tag-csgo { color: var(--orange); border-color: rgba(224,120,48,0.38); background: rgba(224,120,48,0.07); }
+  .tag-css  { color: var(--mid);    border-color: rgba(92,100,144,0.3);  background: rgba(92,100,144,0.05); }
 
   /* ── RIGHT PANEL ── */
   .right {
-    width: 55%;
+    width: 60%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 36px 28px 36px 28px;
+    padding: 30px 48px 30px 36px;
   }
 
   .terminal-card {
     width: 100%;
-    background: #111114;
+    background: var(--surf);
     border-radius: 8px;
-    border: 1px solid rgba(200, 168, 75, 0.18);
+    border: 1px solid var(--border);
     overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(0,200,232,0.03),
+      0 36px 90px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(0,200,232,0.06);
   }
 
+  /* macOS-style title bar */
   .terminal-header {
-    background: #1A1A1F;
-    padding: 0;
-    display: flex;
-    align-items: stretch;
-    border-bottom: 1px solid rgba(200, 168, 75, 0.12);
+    background: var(--surf-2);
     height: 36px;
-  }
-
-  .terminal-title {
-    flex: 1;
     display: flex;
     align-items: center;
     padding: 0 14px;
+    border-bottom: 1px solid var(--border);
+    gap: 7px;
+    position: relative;
+  }
+
+  .dot   { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; }
+  .dot-y { background: #FEBC2E; }
+  .dot-g { background: #28C840; }
+
+  .term-title {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
     font-size: 12px;
-    color: #6B6B7A;
-    letter-spacing: 0.05em;
+    color: var(--mid);
+    letter-spacing: 0.06em;
     white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .win-controls {
-    display: flex;
-    align-items: stretch;
-    flex-shrink: 0;
-  }
-
-  .win-btn {
-    width: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    color: #6B6B7A;
-    cursor: default;
-  }
-
-  .win-btn-close {
-    background: #C42B1C;
-    color: #F0F0F0;
   }
 
   .terminal-body {
-    padding: 8px 0;
+    padding: 22px 30px 26px;
   }
 
-  .row {
+  /* PS prompt */
+  .t-prompt {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .c-ps   { color: var(--cyan); }
+  .c-path { color: var(--mid); }
+  .c-cmd  { color: var(--text); }
+
+  /* ── Multi-select widget ── */
+  .widget { font-size: 15px; }
+
+  .wr {
     display: flex;
     align-items: center;
-    padding: 9px 20px;
-    gap: 16px;
+    padding: 9px 0;
   }
 
-  .row:nth-child(odd) {
-    background: rgba(255, 255, 255, 0.025);
+  /* Focused row highlight */
+  .wr-focus {
+    background: rgba(0,200,232,0.065);
+    border-radius: 3px;
+    margin: 0 -10px;
+    padding: 8.5px 10px;
   }
 
-  .key-badge {
+  .w-pipe-c  { color: var(--cyan);  margin-right: 12px; flex-shrink: 0; }
+  .w-pipe-d  { color: var(--dim);   margin-right: 12px; flex-shrink: 0; }
+  .w-dot-g   { color: var(--green); margin-right: 10px; flex-shrink: 0; }
+  .w-dot-d   { color: var(--dim);   margin-right: 10px; flex-shrink: 0; }
+
+  .w-lbl    { color: var(--text); }
+  .w-lbl-f  { color: var(--text); font-weight: 700; }
+  .w-lbl-d  { color: var(--dim); }
+  .w-sub    { color: var(--mid);  font-size: 13.5px; }
+  .w-sub-d  { color: var(--dim);  font-size: 13.5px; }
+
+  .w-hint { font-size: 13px; color: var(--dim); }
+  .w-sep  { margin: 0 9px; opacity: 0.6; }
+
+  /* Block cursor */
+  .cursor {
     display: inline-block;
-    width: 230px;
-    padding: 4px 10px;
-    background: #1E1E24;
-    border: 1px solid rgba(200, 168, 75, 0.35);
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #E8832A;
-    letter-spacing: 0.04em;
-    text-align: left;
-    flex-shrink: 0;
+    width: 6.5px; height: 13px;
+    background: var(--cyan);
+    vertical-align: middle;
+    margin-left: 4px;
+    opacity: 0.85;
   }
 
-  .arrow {
-    font-size: 14px;
-    color: #7A7A8A;
-    flex-shrink: 0;
+  /* Divider between sections */
+  .t-sep {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    margin: 16px 0 18px;
   }
 
-  .bind-desc {
-    font-size: 14px;
-    color: #F0F0F0;
-    letter-spacing: 0.04em;
-  }
+  /* Confirmed mode block */
+  .widget-2 { font-size: 14.5px; }
 
-  /* ── BOTTOM BAR ── */
+  .w-diamond-g { color: var(--green); margin-right: 12px; flex-shrink: 0; }
+  .w-pipe-c2   { color: var(--cyan);  margin-right: 12px; flex-shrink: 0; }
+  .w-confirmed { color: var(--mid); font-style: italic; }
+
+  /* ── Bottom bar ── */
   .bottom-bar {
-    width: 100%;
-    height: 40px;
-    background: #0D0D0F;
-    border-top: 1px solid rgba(200, 168, 75, 0.12);
+    position: relative; z-index: 2;
+    width: 100%; height: 40px;
+    background: var(--bg);
+    border-top: 1px solid rgba(0,200,232,0.07);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 36px;
+    padding: 0 48px;
   }
 
-  .bottom-url {
+  .b-url {
     font-size: 13px;
-    color: #A0A0B4;
-    letter-spacing: 0.06em;
+    color: var(--mid);
+    letter-spacing: 0.05em;
   }
 
-  .bottom-url span {
-    color: #C8A84B;
-  }
+  .b-url em { font-style: normal; color: var(--cyan); }
 
-  .bottom-tag {
-    font-size: 12px;
-    color: #6B6B7A;
-    letter-spacing: 0.1em;
+  .b-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
+    color: var(--dim);
   }
 </style>
 </head>
 <body>
 
+<!-- Background layers -->
+<div class="layer-grid"></div>
+<div class="layer-glow-l"></div>
+<div class="layer-glow-r"></div>
+<div class="layer-vignette"></div>
+
 <div class="top-bar"></div>
 
 <div class="main">
 
-  <!-- LEFT PANEL -->
+  <!-- ── LEFT PANEL ── -->
   <div class="left">
 
-    <!-- Crosshair SVG -->
-    <svg class="crosshair" width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Top arm -->
-      <rect x="32" y="4" width="8" height="24" fill="#F0F0F0"/>
-      <!-- Bottom arm -->
-      <rect x="32" y="44" width="8" height="24" fill="#F0F0F0"/>
-      <!-- Left arm -->
-      <rect x="4" y="32" width="24" height="8" fill="#F0F0F0"/>
-      <!-- Right arm -->
-      <rect x="44" y="32" width="24" height="8" fill="#F0F0F0"/>
-      <!-- Center dot -->
-      <rect x="34" y="34" width="4" height="4" fill="#E8832A"/>
+    <!-- Watermark crosshair -->
+    <svg class="xhair-bg" width="300" height="300" viewBox="0 0 72 72" fill="none">
+      <rect x="32" y="4"  width="8" height="24" fill="#DDE0F0"/>
+      <rect x="32" y="44" width="8" height="24" fill="#DDE0F0"/>
+      <rect x="4"  y="32" width="24" height="8" fill="#DDE0F0"/>
+      <rect x="44" y="32" width="24" height="8" fill="#DDE0F0"/>
+      <rect x="34" y="34" width="4"  height="4"  fill="#E07830"/>
     </svg>
 
-    <div class="title-block">
-      <div class="title">CS2<br>Configs</div>
-      <div class="subtitle">mynameistito</div>
-    </div>
+    <!-- Logo crosshair -->
+    <svg class="xhair-icon" width="46" height="46" viewBox="0 0 72 72" fill="none">
+      <rect x="32" y="4"  width="8" height="24" fill="#C8CEEE" opacity="0.88"/>
+      <rect x="32" y="44" width="8" height="24" fill="#C8CEEE" opacity="0.88"/>
+      <rect x="4"  y="32" width="24" height="8" fill="#C8CEEE" opacity="0.88"/>
+      <rect x="44" y="32" width="24" height="8" fill="#C8CEEE" opacity="0.88"/>
+      <rect x="34" y="34" width="4"  height="4"  fill="#E07830"/>
+    </svg>
 
-    <div class="desc">
-      Personal binds &amp; config files<br>
-      for Counter-Strike 2
+    <div class="title-cs">CS</div>
+    <div class="title-configs">CONFIGS</div>
+
+    <div class="handle">mynameistito</div>
+
+    <div class="tags">
+      <span class="tag tag-cs2">CS2</span>
+      <span class="tag tag-csgo">CSGO</span>
+      <span class="tag tag-css">CS:S</span>
     </div>
 
   </div>
 
-  <!-- RIGHT PANEL -->
+  <!-- ── RIGHT PANEL ── -->
   <div class="right">
     <div class="terminal-card">
 
       <div class="terminal-header">
-        <div class="terminal-title">~\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\</div>
-        <div class="win-controls">
-          <div class="win-btn">&#x2013;</div>
-          <div class="win-btn">&#x25A1;</div>
-          <div class="win-btn win-btn-close">&#x2715;</div>
-        </div>
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="term-title">deploy_configs.ps1 — PowerShell</div>
       </div>
 
       <div class="terminal-body">
 
-        <div class="row">
-          <div class="key-badge">autoexec.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Entry point</div>
+        <!-- Prompt line -->
+        <div class="t-prompt">
+          <span class="c-ps">PS</span><span class="c-path"> ~\counter-strike-configs&gt;</span><span class="c-cmd"> .\deploy_configs.ps1</span>
         </div>
 
-        <div class="row">
-          <div class="key-badge">config_aliases.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Aliases &amp; toggles</div>
+        <!-- Game multi-select widget -->
+        <div class="widget">
+
+          <div class="wr">
+            <span class="w-pipe-c">◆</span>
+            <span class="w-lbl">Which game(s) do you want to deploy configs for?</span>
+          </div>
+
+          <!-- CS2 — selected, not focused -->
+          <div class="wr">
+            <span class="w-pipe-c">│</span>
+            <span class="w-dot-g">●</span>
+            <span class="w-lbl">CS2&nbsp;&nbsp;&nbsp;</span><span class="w-sub">(Counter-Strike 2)</span>
+          </div>
+
+          <!-- CSGO — selected + focused -->
+          <div class="wr wr-focus">
+            <span class="w-pipe-c">│</span>
+            <span class="w-dot-g">●</span>
+            <span class="w-lbl-f">CSGO&nbsp;&nbsp;</span><span class="w-sub">(Counter-Strike: Global Offensive — legacy)</span>
+          </div>
+
+          <!-- CSS — not selected -->
+          <div class="wr">
+            <span class="w-pipe-d">│</span>
+            <span class="w-dot-d">○</span>
+            <span class="w-lbl-d">CSS&nbsp;&nbsp;&nbsp;(Counter-Strike: Source)</span>
+          </div>
+
+          <!-- Footer hint -->
+          <div class="wr" style="padding-top:12px">
+            <span class="w-pipe-c">└</span>
+            <span class="w-hint">SPACE to select<span class="w-sep">·</span>↑↓ navigate<span class="w-sep">·</span>ENTER confirm<span class="cursor"></span></span>
+          </div>
+
         </div>
 
-        <div class="row">
-          <div class="key-badge">config_crosshair.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Crosshair settings</div>
-        </div>
+        <!-- Divider -->
+        <div class="t-sep"></div>
 
-        <div class="row">
-          <div class="key-badge">config_convars.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Game convars</div>
-        </div>
-
-        <div class="row">
-          <div class="key-badge">config_default_binds.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Default binds</div>
-        </div>
-
-        <div class="row">
-          <div class="key-badge">config_surf_binds.cfg</div>
-          <div class="arrow">→</div>
-          <div class="bind-desc">Surf binds</div>
+        <!-- Mode — already confirmed -->
+        <div class="widget-2">
+          <div class="wr" style="padding: 5px 0">
+            <span class="w-diamond-g">◇</span>
+            <span class="w-lbl">How would you like to deploy the configs?</span>
+          </div>
+          <div class="wr" style="padding: 4px 0">
+            <span class="w-pipe-c2">│</span>
+            <span class="w-confirmed">copy &nbsp;·&nbsp; no elevation needed — re-run after each git pull</span>
+          </div>
         </div>
 
       </div>
@@ -306,8 +442,8 @@
 </div>
 
 <div class="bottom-bar">
-  <div class="bottom-url">github.com/<span>mynameistito</span>/CS2-Configs</div>
-  <div class="bottom-tag">Counter-Strike 2 · Config</div>
+  <div class="b-url">github.com/<em>mynameistito</em>/CS2-Configs</div>
+  <div class="b-tag">Counter-Strike · Multi-Game Config</div>
 </div>
 
 </body>
