@@ -11,6 +11,21 @@ $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ESC      = [char]27
 
 # ---------------------------------------------------------------------------
+# Keep window alive when launched via "Run with PowerShell" / GUI shortcut
+# ---------------------------------------------------------------------------
+# If this is an initial GUI launch (no Mode/Game args, not already relaunched),
+# relaunch with -NoExit so the PS prompt stays open after the script finishes.
+if (($Mode -eq "" -and $Game -eq "") -and ($env:DEPLOY_STAY_OPEN -ne '1')) {
+    $cmdLine = [Environment]::GetCommandLineArgs() -join ' '
+    if ($cmdLine -match '-[Ff]ile\b') {
+        $env:DEPLOY_STAY_OPEN = '1'
+        $pwshExe = [Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
+        Start-Process $pwshExe -ArgumentList "-NoExit -NoProfile -ExecutionPolicy Bypass -File `"$($MyInvocation.MyCommand.Path)`""
+        exit 0
+    }
+}
+
+# ---------------------------------------------------------------------------
 # Terminal UI — clack/prompts style
 # ---------------------------------------------------------------------------
 
@@ -285,10 +300,16 @@ if ($Mode -eq "symlink") {
         Write-Host ""
         $scriptPath  = $MyInvocation.MyCommand.Path
         $gameArg     = $selectedGames -join ","
-        Start-Process powershell.exe `
-            -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Mode symlink -Game `"$gameArg`"" `
-            -Verb RunAs
-        exit
+        $pwshExe = [Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
+        try {
+            Start-Process $pwshExe `
+                -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Mode symlink -Game `"$gameArg`"" `
+                -Verb RunAs -ErrorAction Stop
+        } catch {
+            Write-Host "  ${ESC}[31m✘  UAC was cancelled or elevation failed.${ESC}[0m"
+            Write-Host ""
+        }
+        return
     }
 }
 

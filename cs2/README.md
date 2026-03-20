@@ -7,7 +7,7 @@ Config files for Counter-Strike 2.
 ## Launch Options
 
 ```
--novid -allow_third_party_software +exec autoexec.cfg
+-disable_workshop_command_filtering -novid -allow_third_party_software +exec autoexec.cfg
 ```
 
 | Flag | Purpose |
